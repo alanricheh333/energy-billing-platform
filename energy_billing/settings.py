@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-35h5yzz9r48$dxw#ai$jx3(q0lohn0dbgv!rd%og1wns@37ltl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS : list[str] = []
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     
     #Django REST framework
     'rest_framework',
+    # swagger
+    'drf_yasg',
 
     # registered apps
     'apps.authentication',
@@ -134,6 +136,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'authentication.User'
 
 
 # Celery settings

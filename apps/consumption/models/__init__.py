@@ -1,0 +1,2 @@
+
+from .ConsumptionModel import Consumption

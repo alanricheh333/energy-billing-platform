@@ -46,7 +46,7 @@ class AdminRegisterView(APIView):
     def post(self, request):
         current_user = request.user
         serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid() and current_user.is_staff:
             user_repository = UserRepository()
             auth_service = AuthService(user_repository)
             user = auth_service.register_user_by_admin(
@@ -54,7 +54,7 @@ class AdminRegisterView(APIView):
                 username=serializer.validated_data['username'],
                 password=serializer.validated_data['password'],
                 email=serializer.validated_data.get('email'),
-                role=request.data.get('role', 'customer')
+                role=serializer.validated_data['role'],
             )
             return Response(UserDetailSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

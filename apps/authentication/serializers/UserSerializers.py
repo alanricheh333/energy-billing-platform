@@ -4,6 +4,7 @@ class UserRegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField(required=False)
     password = serializers.CharField(write_only=True, min_length=8)
+    role = serializers.CharField(default='customer')
 
     def validate_username(self, value):
         """

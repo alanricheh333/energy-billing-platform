@@ -39,6 +39,7 @@ urlpatterns = [
     path('auth/', include('apps.authentication.urls')),  # Authentication app URLs
     path('consumption/', include('apps.consumption.urls')),  # Consumption app URLs
     path('billing/', include('apps.billing.urls')),  # Billing app URLs
+     path('invoices/', include('apps.invoices.urls')),  # Billing app URLs
     
     # Swagger and Redoc URLs
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

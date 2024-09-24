@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
     'apps.consumption',
     'apps.billing',
     'apps.invoices',
+
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -146,4 +149,34 @@ CELERY_RESULT_BACKEND = 'rpc://'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'  # Update if needed
+CELERY_TIMEZONE = 'UTC' 
+
+from celery.schedules import crontab # type: ignore
+
+CELERY_BEAT_SCHEDULE = {
+    'send-overdue-invoice-reminder-every-hour': {
+        'task': 'apps.invoices.tasks.send_overdue_invoice_reminder',
+        'schedule': crontab(minute=0, hour='*'),  # Every hour
+    },
+}
+
+
+# Define MEDIA_ROOT where files like invoice PDFs will be stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Ensure that the media directory exists
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
+
+
+# Default email address used for sending notifications
+DEFAULT_FROM_EMAIL = 'noreply@revisitapp.com'
+
+#private email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.privateemail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'noreply@revisitapp.com'
+EMAIL_HOST_PASSWORD = 'chR8w*39HZ9@Q!nsLfj5cS3gVGtapZ'

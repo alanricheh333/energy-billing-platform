@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice {{ invoice.id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .invoice-details {
+            margin-top: 20px;
+        }
+        .invoice-details th, .invoice-details td {
+            padding: 10px;
+            border: 1px solid black;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invoice #{{ invoice.id }}</h1>
+    <p><strong>User:</strong> {{ invoice.user.username }}</p>
+    <p><strong>Billing Period:</strong> {{ invoice.billing_period_start }} to {{ invoice.billing_period_end }}</p>
+    <p><strong>Total Amount:</strong> ${{ invoice.total_amount }}</p>
+    <p><strong>Status:</strong> {{ invoice.get_status_display }}</p>
+    <p><strong>Due Date:</strong> {{ invoice.due_date }}</p>
+
+    <h2>Bills Included:</h2>
+    <table class="invoice-details">
+        <thead>
+            <tr>
+                <th>Bill ID</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bill in invoice.bills.all %}
+            <tr>
+                <td>{{ bill.id }}</td>
+                <td>{{ bill.amount }}</td>
+                <td>{{ bill.date }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">No bills available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p><strong>Generated on:</strong> {{ invoice.created_at }}</p>
+</body>
+</html>
